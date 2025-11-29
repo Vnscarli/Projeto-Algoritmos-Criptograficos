@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class LWE:
+class LWEAlgo:
     def __init__(self, n, q=2**32, sigma = 3.0, message_size=100000):
         self.n = n
         self.q = q
@@ -60,7 +60,7 @@ class LWE:
         return ((cipher1[0] + cipher2[0]) % self.q, (cipher1[1] + cipher2[1]) % self.q)
     
 if __name__ == "__main__":
-    lwe = LWE(n=512, q=2**32, sigma=3.0, message_size=1000)
+    lwe = LWEAlgo(n=512, q=2**32, sigma=3.0, message_size=1000)
     
     lwe.keygen()
     
