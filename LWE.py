@@ -2,7 +2,7 @@ import numpy as np
 
 
 class LWEAlgo:
-    def __init__(self, n, q=2**32, sigma = 3.0, message_size=100000):
+    def __init__(self, n=1175, q=2**32, sigma = 3.0, message_size=100000):
         self.n = n
         self.q = q
         self.sigma = sigma
@@ -30,6 +30,7 @@ class LWEAlgo:
         a = np.random.randint(0, self.q, self.n, dtype=np.int64)
         
         error = int(np.random.normal(0, self.sigma))
+        #
         
         dot_product = np.dot(a, self.s) % self.q
         

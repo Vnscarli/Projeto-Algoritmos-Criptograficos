@@ -24,11 +24,11 @@ def achar_primo(nbits):
     while True:
         p = secrets.randbits(nbits)
         p |= (1<<(nbits-1)) | 1
-        if miller_rabin(p):
+        if miller_rabin(p): 
             return p
 
 class PaillierAlgo:
-    def __init__(self, key_size):
+    def __init__(self, key_size=3072):
         self.keysize = key_size
         self.n = None
         self.lam = None
@@ -69,7 +69,7 @@ class PaillierAlgo:
         return (cipher1 * cipher2) % self.n_sq
     
 if __name__ == "__main__":
-    paillier = PaillierAlgo(key_size=512)
+    paillier = PaillierAlgo(key_size=3072)
     paillier.keygen()
     
     m1 = 54

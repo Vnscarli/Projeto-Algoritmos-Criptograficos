@@ -1,13 +1,14 @@
 import time
 from LWE import LWEAlgo
 from Paillier import PaillierAlgo
+import random
 
 def compare_algo(iteracoes):
-    val1 = 43
-    val2 = 5
+    val1 = random.randint(1, 1000)
+    val2 = random.randint(1, 1000)
     
-    lwe = LWEAlgo(n=512, message_size=10000)
-    paillier = PaillierAlgo(key_size=512)
+    lwe = LWEAlgo(n=1175, q=2**32, message_size=10000)
+    paillier = PaillierAlgo(key_size=3072)
     start = time.perf_counter()
     lwe.keygen()
     lwe_keygen_time = (time.perf_counter() - start) / iteracoes
@@ -66,25 +67,29 @@ def compare_algo(iteracoes):
     print(f"{'Decriptação':<15} | {to_ms(lwe_dec_time):<10} | {to_ms(pai_dec_time):<10} | {'LWE' if lwe_dec_time < pai_dec_time else 'Paillier'}")
     print("="*40)
     
-    print("\nTentando quebrar o LWE com excesso de somas...")
-    acc_lwe = lwe.encrypt(0)
-    limit = 2000 
-    val_add = 100
+    print("\nTentando quebrar o LWE com excesso de somas:")
+    
+    limit = 1000
     failed = False
+    acc = random.randint(1, 10)
+    acc_lwe = lwe.encrypt(acc)
+    
     
     for i in range(1, limit):
-        acc_lwe = lwe.add(acc_lwe, lwe.encrypt(val_add))
-        if i % 100 == 0:
-            res = lwe.decrypt(acc_lwe)
-            expected = i * val_add
-            if res != expected:
-                print(f"LWE FALHOU na iteração {i}. Esperado: {expected}, Obteve: {res}")
-                failed = True
-                break
+        y = random.randint(1, 10)
+        acc_lwe = lwe.add(acc_lwe, lwe.encrypt(y))
+        expected = acc + y
+        acc = lwe.decrypt(acc_lwe)
+        
+        if acc != expected:
+            print(f"LWE FALHOU na iteração {i}. Esperado: {expected}, Obteve: {acc}")
+            failed = True
+            break
+    
     if not failed:
         print(f"LWE aguentou {limit} somas sem falhar (com os parâmetros atuais)!")
     else:
-        print("Paillier aguentaria essas somas infinitamente (até estourar 2048 bits).")
+        print("Paillier aguentaria essas somas infinitamente.")
 
 if __name__ == "__main__":
-    compare_algo(1000)
+    compare_algo(100)
