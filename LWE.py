@@ -14,11 +14,11 @@ class LWEAlgo:
         self.public_b = None
         
     def keygen(self):
-        self.s = np.random.randint(0, self.q, self.n, dtype=np.int64)
+        self.s = np.random.randint(0, self.q, self.n, dtype=np.uint64)
         
-        self.A = np.random.randint(0, self.q, (self.n, self.n), dtype=np.int64)
+        self.A = np.random.randint(0, self.q, (self.n, self.n), dtype=np.uint64)
         
-        e = np.random.normal(0, self.sigma, self.n).astype(np.int64)
+        e = np.random.normal(0, self.sigma, self.n).astype(np.uint64)
         self.public_b = (np.dot(self.A, self.s) + e) % self.q
         
         return (self.s, self.A, self.public_b)
@@ -27,7 +27,7 @@ class LWEAlgo:
         if self.s is None:
             raise ValueError("Chaves não geradas!")
         
-        a = np.random.randint(0, self.q, self.n, dtype=np.int64)
+        a = np.random.randint(0, self.q, self.n, dtype=np.uint64)
         
         error = int(np.random.normal(0, self.sigma))
         #

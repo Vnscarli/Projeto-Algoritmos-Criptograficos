@@ -3,19 +3,19 @@ from LWE import LWEAlgo
 from Paillier import PaillierAlgo
 import random
 
-def compare_algo(iteracoes):
+def compare_algo(iteracoes, n_lwew, q_lwe, key_paillier):
     val1 = random.randint(1, 1000)
     val2 = random.randint(1, 1000)
     
-    lwe = LWEAlgo(n=1175, q=2**32, message_size=10000)
-    paillier = PaillierAlgo(key_size=3072)
+    lwe = LWEAlgo(n=n_lwew, q=q_lwe, message_size=100000)
+    paillier = PaillierAlgo(key_size=key_paillier)
     start = time.perf_counter()
     lwe.keygen()
-    lwe_keygen_time = (time.perf_counter() - start) / iteracoes
+    lwe_keygen_time = (time.perf_counter() - start) 
     
     start = time.perf_counter()
     paillier.keygen()
-    pai_keygen_time = (time.perf_counter() - start) / iteracoes
+    pai_keygen_time = (time.perf_counter() - start) 
     
     start = time.perf_counter()
     for _ in range(iteracoes):
@@ -69,7 +69,7 @@ def compare_algo(iteracoes):
     
     print("\nTentando quebrar o LWE com excesso de somas:")
     
-    limit = 1000
+    limit = 2000
     failed = False
     acc = random.randint(1, 10)
     acc_lwe = lwe.encrypt(acc)
@@ -92,4 +92,21 @@ def compare_algo(iteracoes):
         print("Paillier aguentaria essas somas infinitamente.")
 
 if __name__ == "__main__":
-    compare_algo(100)
+    iteracoes = 1000
+    n_lwe1 = 2400 #Equivalente à 128.5 bits
+    q_lwe1 = 2**64
+    keySize_Paillier = 3072 #Equivalente à 128 bits
+    print(f"Rodando a comparação {iteracoes} vezes para os seguintes algoritmos:")
+    print()
+    print(f"* Paillier com tamanho da chave de {keySize_Paillier}.")
+    print(f"* LWE com n={n_lwe1} e q={q_lwe1}.")
+    compare_algo(iteracoes=iteracoes, n_lwew=n_lwe1, q_lwe=q_lwe1, key_paillier=keySize_Paillier)
+    
+    n_lwe2 = 1175 #Equivalente à 130.1 bits
+    q_lwe2 = 2**32
+    print(f"Rodando a comparação {iteracoes} vezes para os seguintes algoritmos:")
+    print()
+    print(f"* Paillier com tamanho da chave de {keySize_Paillier}.")
+    print(f"* LWE com n={n_lwe2} e q={q_lwe2}.")
+    compare_algo(iteracoes=iteracoes, n_lwew=n_lwe2, q_lwe=q_lwe2, key_paillier=keySize_Paillier)
+    
